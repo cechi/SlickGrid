@@ -88,8 +88,9 @@ if (typeof Slick === "undefined") {
             fullWidthRows: false,
             multiColumnSort: false,
             defaultFormatter: defaultFormatter,
-      forceSyncScrolling: false,
-      addNewRowCssClass: "new-row"
+            forceSyncScrolling: false,
+            addNewRowCssClass: "new-row",
+            cellStyles: null
         };
 
         var columnDefaults = {
@@ -1989,7 +1990,16 @@ if (typeof Slick === "undefined") {
                 }
             }
 
-            stringArray.push("<div class='" + cellCss + "'>");
+            stringArray.push("<div class='" + cellCss + "'");
+
+            for (var key in options.cellStyles) {
+                var index = getColumnIndex(options.cellStyles[key].column);
+                if (options.cellStyles[key].row == row && index == cell) {
+                    stringArray.push(" style='" + options.cellStyles[key].value + "'");
+                }
+            }
+
+            stringArray.push(">");
 
             // if there is a corresponding row (if not, this is the Add New row or this data hasn't been loaded yet)
             if (item) {
