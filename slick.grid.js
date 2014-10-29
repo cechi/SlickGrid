@@ -2046,12 +2046,16 @@ if (typeof Slick === "undefined") {
                 return;
             }
 
-      if (rowNodeFromLastMouseWheelEvent == cacheEntry.rowNode) {
-        cacheEntry.rowNode.style.display = 'none';
-        zombieRowNodeFromLastMouseWheelEvent = rowNodeFromLastMouseWheelEvent;
-      } else {
+          if (rowNodeFromLastMouseWheelEvent == cacheEntry.rowNode) {
+            cacheEntry.rowNode.style.display = 'none';
+            zombieRowNodeFromLastMouseWheelEvent = rowNodeFromLastMouseWheelEvent;
+          } else {
+            cacheEntry.rowNode[0].parentElement.removeChild(cacheEntry.rowNode[0]);
+            // Remove the row from the right viewport
+            if (cacheEntry.rowNode[1]) {
                 cacheEntry.rowNode[1].parentElement.removeChild(cacheEntry.rowNode[1]);
-      }
+            }
+          }
       
             delete rowsCache[row];
             delete postProcessedRows[row];
