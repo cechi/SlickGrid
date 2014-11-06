@@ -90,7 +90,7 @@ if (typeof Slick === "undefined") {
             defaultFormatter: defaultFormatter,
             forceSyncScrolling: false,
             addNewRowCssClass: "new-row",
-            cellStyles: null
+            cellAttributes: null
         };
 
         var columnDefaults = {
@@ -1693,6 +1693,21 @@ if (typeof Slick === "undefined") {
             }
         }
 
+        // Given a set of columns, make sure `minWidth <= width <= maxWidth`
+        function enforceWidthLimits(columns) {
+            columnsById = {};
+            for (var i = 0; i < columns.length; i++) {
+                var m = columns[i]; // Changing the object reference can cause problems for external consumers of that object. Also, I see no reason to re-extend from defaults here, this is done in init.
+                columnsById[m.id] = i;
+                if (m.minWidth && m.width < m.minWidth) {
+                    m.width = m.minWidth;
+                }
+                if (m.maxWidth && m.width > m.maxWidth) {
+                    m.width = m.maxWidth;
+                }
+            }
+        }
+
         function setColumns(columnDefinitions) {
             columns = columnDefinitions;
 
@@ -1723,6 +1738,28 @@ if (typeof Slick === "undefined") {
                 applyColumnWidths();
                 handleScroll();
             }
+        }
+
+        // Given a column definition object, do all the steps required to react to a change in the widths of any of the columns, and nothing more.
+        function updateColumnWidths(columnDefinitions) {
+            columns = columnDefinitions;
+            enforceWidthLimits(columns);
+            updateColumnCaches();
+            if (initialized) {
+                // Column Headers
+                $headers.width(getHeadersWidth()); // Set the full width of all the headers together
+                // Update the widths of each header dom element
+                $headerCells = $headers.children();
+                for (var i = 0; i < columns.length; i++) {
+                    var m = columns[i];
+                    $el = $headerCells.eq( getColumnIndex(m.id) ); // Get the jQuery-wrapped instance of this column header
+                    $el.width(m.width - headerColumnWidthDiff);
+                }
+                // Cells and grid canvas
+                updateCanvasWidth(true); 
+                // Update the grid-canvas width. The `true` tells it to update the width of all the cells even if the canvas hasn't changed size (eg: if there was plenty of room for the cells both before and after the sizing, the canvas doesn't change)
+            }
+            trigger(self.onColumnsResized);
         }
 
         function getOptions() {
@@ -1992,10 +2029,12 @@ if (typeof Slick === "undefined") {
 
             stringArray.push("<div class='" + cellCss + "'");
 
-            for (var key in options.cellStyles) {
-                var index = getColumnIndex(options.cellStyles[key].column);
-                if (options.cellStyles[key].row == row && index == cell) {
-                    stringArray.push(" style='" + options.cellStyles[key].value + "'");
+            for (var key in options.cellAttributes) {
+                var index = getColumnIndex(options.cellAttributes[key].column);
+                if (options.cellAttributes[key].row == row && index == cell) {
+                    for (var attr in options.cellAttributes[key].attributes) {
+                        stringArray.push(" " + attr + "='" + options.cellAttributes[key].attributes[attr] + "'");
+                    }
                 }
             }
 
@@ -3099,8 +3138,8 @@ if (typeof Slick === "undefined") {
                             scrollRowIntoView(cell.row, false);
                         }
 
-                        setActiveCellInternal(getCellNode(cell.row, cell.cell));
                     }
+                    setActiveCellInternal(getCellNode(cell.row, cell.cell));
                 }
             }
         }
@@ -4263,6 +4302,7 @@ if (typeof Slick === "undefined") {
             "unregisterPlugin": unregisterPlugin,
             "getColumns": getColumns,
             "setColumns": setColumns,
+            "updateColumnWidths": updateColumnWidths,
             "getColumnIndex": getColumnIndex,
             "updateColumnHeader": updateColumnHeader,
             "setSortColumn": setSortColumn,

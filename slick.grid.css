@@ -137,8 +137,12 @@ classes should alter those!
   padding: 0px
 }
 
+.slick-cell.selected, .slick-cell.active {
+  background-color: #C1E5FF;
+}
+
 .slick-cell input.editor-text {
-    background: none repeat scroll 0 0 transparent;
+    background: white; //none repeat scroll 0 0 transparent;
     border: 1px solid blue;
     height: 100%;
     margin: -1px 0 0 -1px;
