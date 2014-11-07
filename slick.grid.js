@@ -3285,7 +3285,13 @@ if (typeof Slick === "undefined") {
             //  we're ultimately calling getCellFromPoint.  Need to further analyze
             //  if getCellFromEvent can work with frozen columns
 
+            // console.log($cell);
+
             var c = $cell.parents('.grid-canvas').offset();
+
+            if (!c) {
+                return null;
+            }
 
             var rowOffset = 0;
             var isBottom = $cell.parents('.grid-canvas-bottom').length;

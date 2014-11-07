@@ -35,10 +35,6 @@ classes should alter those!
   float: left;
 }
 
-.slick-headerrow-column.ui-state-default {
-  padding: 4px;
-}
-
 .slick-header-column-sorted {
   font-style: italic;
 }
@@ -109,6 +105,16 @@ classes should alter those!
   font-size: 11px;
 }
 
+.slick-headerrow-column {
+  padding: 0px;
+}
+
+.slick-headerrow-column input {
+  border-width: 0px;
+  width: 100%;
+  height: 100%;
+}
+
 .slick-group {
 }
 
@@ -143,7 +149,7 @@ classes should alter those!
 
 .slick-cell input.editor-text {
     background: white; //none repeat scroll 0 0 transparent;
-    border: 1px solid blue;
+    border: 1px solid #54c5d0;
     height: 100%;
     margin: -1px 0 0 -1px;
     outline: 0 none;
