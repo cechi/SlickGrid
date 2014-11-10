@@ -1,0 +1,13 @@
+{
+  "name": "cechi-slickgrid",
+  "homepage": "https://github.com/cechi/SlickGrid",
+  "_release": "bc5b7b38f7",
+  "_resolution": {
+    "type": "branch",
+    "branch": "develop",
+    "commit": "bc5b7b38f79a54aeaa12debda3e301f25e004fe5"
+  },
+  "_source": "https://github.com/cechi/SlickGrid.git",
+  "_target": "develop",
+  "_originalSource": "https://github.com/cechi/SlickGrid.git"
+}

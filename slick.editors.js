@@ -303,7 +303,7 @@
 
     this.loadValue = function (item) {
       defaultValue = !!item[args.column.field];
-      if (defaultValue) {
+      if (defaultValue) {  //== '' || defaultValue == 'false' || !defaultValue) {
         $select.prop('checked', true);
       } else {
         $select.prop('checked', false);
@@ -311,11 +311,19 @@
     };
 
     this.serializeValue = function () {
-      return $select.prop('checked');
+      if ($select.prop('checked')) {
+        return 1;
+      } else {
+        return null;
+      }
     };
 
     this.applyValue = function (item, state) {
-      item[args.column.field] = state;
+      if (state) {
+        item[args.column.field] = 1;
+      } else {
+        item[args.column.field] = null;
+      }
     };
 
     this.isValueChanged = function () {

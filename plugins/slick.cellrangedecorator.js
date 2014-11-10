@@ -23,7 +23,8 @@
       selectionCssClass: 'slick-range-decorator',
       selectionCss: {
         "zIndex": "9999",
-        "border": "2px dashed red"
+        "border": "2px dashed red",
+        "box-sizing": "content-box"
       }
     };
 
